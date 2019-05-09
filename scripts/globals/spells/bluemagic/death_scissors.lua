@@ -21,7 +21,7 @@ function onMagicCastingCheck(caster,target,spell)
     return 0
 end
 
-function onSpellCast(caster,target,spell)
+function onSpellCast(caster,target,spell,taChar)
     local params = {}
     -- This data should match information on http://wiki.ffxiclopedia.org/wiki/Calculating_Blue_Magic_Damage
         params.tpmod = TPMOD_DAMAGE
@@ -41,7 +41,7 @@ function onSpellCast(caster,target,spell)
         params.mnd_wsc = 0.0
         params.chr_wsc = 0.0
     damage = BluePhysicalSpell(caster, target, spell, params)
-    damage = BlueFinalAdjustments(caster, target, spell, damage, params)
+    damage = BlueFinalAdjustments(caster, target, spell, damage, params, taChar)
 
     return damage
 end

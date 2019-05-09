@@ -163,6 +163,7 @@ function BluePhysicalSpell(caster, target, spell, params)
         hitsdone = hitsdone + 1;
     end
 
+    caster:delStatusEffectsByFlag(dsp.effectFlag.ATTACK)
     -- print("Hits landed "..hitslanded.."/"..hitsdone.." for total damage: "..finaldmg);
 
     return finaldmg;
@@ -229,7 +230,7 @@ function BlueMagicalSpell(caster, target, spell, params, statMod)
     return dmg;
 end;
 
-function BlueFinalAdjustments(caster, target, spell, dmg, params)
+function BlueFinalAdjustments(caster, target, spell, dmg, params, taChar)
     if (dmg < 0) then
         dmg = 0;
     end
@@ -245,7 +246,7 @@ function BlueFinalAdjustments(caster, target, spell, dmg, params)
     dmg = utils.stoneskin(target, dmg);
 
     target:takeDamage(dmg, caster, dsp.attackType.PHYSICAL, params.dmgType or dsp.damageType.NONE);
-    target:updateEnmityFromDamage(caster,dmg);
+    target:updateEnmityFromDamage(taChar or caster,dmg);
     target:handleAfflatusMiseryDamage(dmg);
     -- TP has already been dealt with.
     return dmg;

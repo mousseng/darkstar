@@ -2075,7 +2075,7 @@ namespace luautils
     *                                                                       *
     ************************************************************************/
 
-    int32 OnSpellCast(CBattleEntity* PCaster, CBattleEntity* PTarget, CSpell* PSpell)
+    int32 OnSpellCast(CBattleEntity* PCaster, CBattleEntity* PTarget, CSpell* PSpell, CBattleEntity* taChar)
     {
         DSP_DEBUG_BREAK_IF(PSpell == nullptr);
 
@@ -2096,7 +2096,17 @@ namespace luautils
         CLuaSpell LuaSpell(PSpell);
         Lunar<CLuaSpell>::push(LuaHandle, &LuaSpell);
 
-        if (lua_pcall(LuaHandle, 3, 1, 0))
+        if (taChar == nullptr)
+        {
+            lua_pushnil(LuaHandle);
+        }
+        else
+        {
+            CLuaBaseEntity LuaTrickAttackEntity(taChar);
+            Lunar<CLuaBaseEntity>::push(LuaHandle, &LuaTrickAttackEntity);
+        }
+
+        if (lua_pcall(LuaHandle, 4, 1, 0))
         {
             ShowError("luautils::onSpellCast: %s\n", lua_tostring(LuaHandle, -1));
             lua_pop(LuaHandle, 1);
